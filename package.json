@@ -1,0 +1,17 @@
+{
+    "name": "natours",
+    "version": "1.0.0",
+    "description": "Following up with Jonas",
+    "main": "app.js",
+    "scripts": {
+        "start": "nodemon app.js"
+    },
+    "author": "Burjer",
+    "license": "ISC",
+    "dependencies": {
+        "express": "^4.21.0"
+    },
+    "devDependencies": {
+        "nodemon": "^3.1.4"
+    }
+}
