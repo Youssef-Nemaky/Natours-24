@@ -10,8 +10,8 @@ const tours = JSON.parse(
 );
 
 app.get('/api/v1/tours', (req, res) => {
-  //   const data = fs.createReadStream('./dev-data/data/tours-simple.json', 'utf8');
-  //   data.pipe(res);
+  // const tours = fs.createReadStream('./dev-data/data/tours-simple.json', 'utf8');
+  // data.pipe(tours);
   res.status(200).json(tours);
 });
 
