@@ -29,6 +29,14 @@ app.post('/api/v1/tours', (req, res) => {
   res.status(201).json(tours);
 });
 
+app.get('/api/v1/tours/:id', (req, res) => {
+  const tour = tours.find((el) => el.id == req.params.id);
+  console.log(tour);
+  if (!tour) {
+    res.status(404).send('Tour Not Found');
+  } else res.status(200).json(tour);
+});
+
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
   console.log(`Server is listening on port: ${PORT}`);
