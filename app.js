@@ -48,6 +48,16 @@ app.patch('/api/v1/tours/:id', (req, res) => {
   }
 });
 
+app.delete('/api/v1/tours/:id', (req, res) => {
+  //not actually deleting it
+  const tour = tours.find((el) => el.id == req.params.id);
+  if (!tour) {
+    res.status(404).json({ status: 'Failed', data: 'Tour not found' });
+  } else {
+    res.status(200).json({ status: 'Sucess', data: tour });
+  }
+});
+
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
   console.log(`Server is listening on port: ${PORT}`);
