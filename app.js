@@ -54,7 +54,7 @@ app.delete('/api/v1/tours/:id', (req, res) => {
   if (!tour) {
     res.status(404).json({ status: 'Failed', data: 'Tour not found' });
   } else {
-    res.status(200).json({ status: 'Sucess', data: tour });
+    res.status(204).json({ status: 'Sucess', data: tour });
   }
 });
 
