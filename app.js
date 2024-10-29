@@ -31,10 +31,21 @@ app.post('/api/v1/tours', (req, res) => {
 
 app.get('/api/v1/tours/:id', (req, res) => {
   const tour = tours.find((el) => el.id == req.params.id);
-  console.log(tour);
   if (!tour) {
-    res.status(404).send('Tour Not Found');
-  } else res.status(200).json(tour);
+    res.status(404).json({ status: 'Failed', data: 'Tour not found' });
+  } else {
+    res.status(200).json({ status: 'Sucess', data: tour });
+  }
+});
+
+app.patch('/api/v1/tours/:id', (req, res) => {
+  //not actually updating it
+  const tour = tours.find((el) => el.id == req.params.id);
+  if (!tour) {
+    res.status(404).json({ status: 'Failed', data: 'Tour not found' });
+  } else {
+    res.status(200).json({ status: 'Sucess', data: tour });
+  }
 });
 
 const PORT = process.env.PORT || 8000;
