@@ -4,10 +4,13 @@ const {
   createTour,
   updateTour,
   deleteTour,
+  findTourById,
 } = require('../controllers/tourController');
 
 const express = require('express');
 const router = express.Router();
+
+router.param('id', findTourById);
 
 router.route('/').get(getAllTours).post(createTour);
 router.route('/:id').get(getTour).patch(updateTour).delete(deleteTour);

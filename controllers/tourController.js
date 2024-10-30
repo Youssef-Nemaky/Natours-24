@@ -10,6 +10,16 @@ exports.getAllTours = (req, res) => {
   res.status(200).json(tours);
 };
 
+exports.findTourById = (req, res, next, idVal) => {
+  const tour = tours.find((el) => el.id == idVal);
+  if (!tour) {
+    return res.status(404).json({ status: 'Failed', data: 'Tour not found' });
+  } else {
+    req.tour = tour;
+    next();
+  }
+};
+
 exports.createTour = (req, res) => {
   const newId = tours[tours.length - 1].id + 1;
   const newTour = { id: newId, ...req.body };
@@ -25,30 +35,15 @@ exports.createTour = (req, res) => {
 };
 
 exports.getTour = (req, res) => {
-  const tour = tours.find((el) => el.id == req.params.id);
-  if (!tour) {
-    res.status(404).json({ status: 'Failed', data: 'Tour not found' });
-  } else {
-    res.status(200).json({ status: 'Sucess', data: tour });
-  }
+  res.status(200).json({ status: 'Sucess', data: req.tour });
 };
 
 exports.updateTour = (req, res) => {
   //not actually updating it
-  const tour = tours.find((el) => el.id == req.params.id);
-  if (!tour) {
-    res.status(404).json({ status: 'Failed', data: 'Tour not found' });
-  } else {
-    res.status(200).json({ status: 'Sucess', data: tour });
-  }
+  res.status(200).json({ status: 'Sucess', data: req.tour });
 };
 
 exports.deleteTour = (req, res) => {
   //not actually deleting it
-  const tour = tours.find((el) => el.id == req.params.id);
-  if (!tour) {
-    res.status(404).json({ status: 'Failed', data: 'Tour not found' });
-  } else {
-    res.status(204).json({ status: 'Sucess', data: tour });
-  }
+  res.status(204).json({ status: 'Sucess', data: req.tour });
 };
