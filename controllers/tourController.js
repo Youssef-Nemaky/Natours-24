@@ -20,6 +20,17 @@ exports.findTourById = (req, res, next, idVal) => {
   }
 };
 
+exports.checkBody = (req, res, next) => {
+  if (!req.body.name || !req.body.price) {
+    return res.status(400).json({
+      status: 'Failed',
+      message: 'Bad Request... name & price should be provided',
+    });
+  } else {
+    next();
+  }
+};
+
 exports.createTour = (req, res) => {
   const newId = tours[tours.length - 1].id + 1;
   const newTour = { id: newId, ...req.body };

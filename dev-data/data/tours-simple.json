@@ -235,5 +235,11 @@
         "id": 14,
         "name": "Test trip ray2a",
         "duration": "99"
+    },
+    {
+        "id": 15,
+        "name": "Test trip ray2a",
+        "duration": "99",
+        "price": 5
     }
 ]
