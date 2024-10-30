@@ -1,7 +1,7 @@
 const fs = require('fs');
 
 const tours = JSON.parse(
-  fs.readFileSync('./dev-data/data/tours-simple.json', 'utf8')
+  fs.readFileSync('./dev-data/data/tours-simple.json', 'utf8'),
 );
 
 exports.getAllTours = (req, res) => {
@@ -11,28 +11,27 @@ exports.getAllTours = (req, res) => {
 };
 
 exports.findTourById = (req, res, next, idVal) => {
-  const tour = tours.find((el) => el.id == idVal);
+  const tour = tours.find((el) => el.id === idVal);
   if (!tour) {
     return res.status(404).json({ status: 'Failed', data: 'Tour not found' });
-  } else {
-    req.tour = tour;
-    next();
   }
+  req.tour = tour;
+  next();
 };
 
 exports.checkBody = (req, res, next) => {
   if (!req.body.name || !req.body.price) {
     return res.status(400).json({
       status: 'Failed',
-      message: 'Bad Request... name & price should be provided',
+      message: 'Missing name or price',
     });
-  } else {
-    next();
   }
+  next();
 };
 
 exports.createTour = (req, res) => {
   const newId = tours[tours.length - 1].id + 1;
+  // eslint-disable-next-line node/no-unsupported-features/es-syntax
   const newTour = { id: newId, ...req.body };
   tours.push(newTour);
   fs.writeFile(
@@ -40,7 +39,7 @@ exports.createTour = (req, res) => {
     JSON.stringify(tours, null, 4),
     (err) => {
       if (err) console.log('Error Writing the file: ', err);
-    }
+    },
   );
   res.status(201).json(tours);
 };

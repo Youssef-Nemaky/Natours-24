@@ -1,3 +1,5 @@
+const express = require('express');
+
 const {
   getAllTours,
   getTour,
@@ -8,7 +10,6 @@ const {
   checkBody,
 } = require('../controllers/tourController');
 
-const express = require('express');
 const router = express.Router();
 
 router.param('id', findTourById);
