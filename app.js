@@ -95,6 +95,13 @@ const deleteUser = (req, res) => {
     .json({ status: 'failed', message: 'Route is not yet implemented' });
 };
 
+app.route('/api/v1/users').get(getAllUsers).post(createUser);
+app
+  .route('/api/v1/users/:id')
+  .get(getUser)
+  .patch(updateUser)
+  .delete(deleteUser);
+
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
   console.log(`Server is listening on port: ${PORT}`);

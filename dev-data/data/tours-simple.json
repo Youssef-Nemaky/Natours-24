@@ -230,5 +230,10 @@
         "id": 13,
         "name": "Cool trip 65",
         "duration": "2"
+    },
+    {
+        "id": 14,
+        "name": "Test trip ray2a",
+        "duration": "99"
     }
 ]
