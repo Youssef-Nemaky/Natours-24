@@ -1,9 +1,15 @@
 const Tour = require('../models/tourModel');
 
-exports.getAllTours = (req, res) => {
+exports.getAllTours = async (req, res) => {
   // const tours = fs.createReadStream('./dev-data/data/tours-simple.json', 'utf8');
   // data.pipe(tours);
-  //   res.status(200).json(tours);
+
+  try {
+    const tours = await Tour.find();
+    res.status(200).json({ status: 'success', tours });
+  } catch (err) {
+    res.status(400).json({ status: 'success', message: err });
+  }
 };
 
 exports.createTour = async (req, res) => {
