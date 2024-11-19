@@ -6,15 +6,9 @@ exports.getAllTours = async (req, res) => {
 
   try {
     const tours = await Tour.find();
-<<<<<<< HEAD
     res.status(200).json({ status: 'success', length: tours.length, tours });
   } catch (err) {
     res.status(400).json({ status: 'fail', message: err });
-=======
-    res.status(200).json({ status: 'success', tours });
-  } catch (err) {
-    res.status(400).json({ status: 'success', message: err });
->>>>>>> 9e4c4b8b9800f68f7b43e50406a99299994a289d
   }
 };
 
