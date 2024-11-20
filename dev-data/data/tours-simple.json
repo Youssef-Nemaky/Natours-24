@@ -205,47 +205,5 @@
             "2022-01-16,10:00",
             "2022-12-12,10:00"
         ]
-    },
-    {
-        "id": 9,
-        "name": "Cool trip 1",
-        "duration": "9"
-    },
-    {
-        "id": 10,
-        "name": "Cool trip 2",
-        "duration": "4"
-    },
-    {
-        "id": 11,
-        "name": "Cool trip 3",
-        "duration": "2"
-    },
-    {
-        "id": 12,
-        "name": "Cool trip 6",
-        "duration": "2"
-    },
-    {
-        "id": 13,
-        "name": "Cool trip 65",
-        "duration": "2"
-    },
-    {
-        "id": 14,
-        "name": "Test trip ray2a",
-        "duration": "99"
-    },
-    {
-        "id": 15,
-        "name": "Test trip ray2a",
-        "duration": "99",
-        "price": 5
-    },
-    {
-        "id": 16,
-        "name": "Test trip ray2a",
-        "duration": "99",
-        "price": 5
     }
 ]
