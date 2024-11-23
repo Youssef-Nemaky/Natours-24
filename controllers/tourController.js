@@ -20,6 +20,16 @@ exports.getAllTours = async (req, res) => {
 
     query = Tour.find(query);
 
+    // Sorting
+    if (req.query.sort) {
+      let sortQuery = req.query.sort;
+      sortQuery = sortQuery.split(',').join(' ');
+      query = query.sort(sortQuery);
+    } else {
+      // sort by price
+      query = query.sort('-createdAt');
+    }
+
     const tours = await query;
     res.status(200).json({ status: 'success', length: tours.length, tours });
   } catch (err) {
