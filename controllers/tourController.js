@@ -5,7 +5,15 @@ exports.getAllTours = async (req, res) => {
   // data.pipe(tours);
 
   try {
-    const tours = await Tour.find();
+    // Filtering A (equal states -> price = x, name = x)
+    let query = { ...req.query };
+    const excludedFields = ['sort', 'page', 'limit', 'fields'];
+
+    excludedFields.forEach((el) => {
+      delete query[el];
+    });
+
+    const tours = await query;
     res.status(200).json({ status: 'success', length: tours.length, tours });
   } catch (err) {
     res.status(400).json({ status: 'fail', message: err });
