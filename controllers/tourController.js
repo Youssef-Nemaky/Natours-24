@@ -13,6 +13,13 @@ exports.getAllTours = async (req, res) => {
       delete query[el];
     });
 
+    // Filtering B (Comparision states -> price gte x )
+    let queryStr = JSON.stringify(query);
+    queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
+    query = JSON.parse(queryStr);
+
+    query = Tour.find(query);
+
     const tours = await query;
     res.status(200).json({ status: 'success', length: tours.length, tours });
   } catch (err) {
