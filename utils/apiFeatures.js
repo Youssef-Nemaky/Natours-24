@@ -40,6 +40,7 @@ class APIFeatures {
       let fields = this.queryStr.fields;
       fields = fields.split(',').join(' ');
       this.query.select(fields);
+      this.query.select('-__v');
     } else {
       this.query.select('-__v');
     }
