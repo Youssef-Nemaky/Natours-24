@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { default: slugify } = require('slugify');
 
 const tourSchema = new mongoose.Schema(
   {
@@ -6,6 +7,10 @@ const tourSchema = new mongoose.Schema(
       type: String,
       required: [true, 'Tour name is required'],
       unique: true,
+    },
+
+    slug: {
+      type: String,
     },
 
     price: {
@@ -79,6 +84,11 @@ const tourSchema = new mongoose.Schema(
 
 tourSchema.virtual('durationWeeks').get(function () {
   if (this.duration) return this.duration / 7;
+});
+
+tourSchema.pre('save', function (next) {
+  this.slug = slugify(this.name, { lower: true });
+  next();
 });
 
 const Tour = mongoose.model('Tour', tourSchema);
