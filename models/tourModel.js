@@ -7,6 +7,8 @@ const tourSchema = new mongoose.Schema(
       type: String,
       required: [true, 'Tour name is required'],
       unique: true,
+      minLength: [10, 'Tour name must be more or equal to 10 characters'],
+      maxLength: [50, 'Tour name must be less or equal to 50 characters'],
     },
 
     slug: {
@@ -20,7 +22,12 @@ const tourSchema = new mongoose.Schema(
 
     priceDiscount: Number,
 
-    rating: { type: Number, default: 4.5 },
+    rating: {
+      type: Number,
+      default: 4.5,
+      min: [1, 'Tour rating must be above or equal to 1.0'],
+      max: [5, 'Tour rating must be below or equal to 5.0'],
+    },
 
     duration: {
       type: Number,
@@ -45,6 +52,10 @@ const tourSchema = new mongoose.Schema(
     difficulty: {
       type: String,
       required: [true, 'Tour difficulty is required'],
+      enum: {
+        values: ['easy', 'medium', 'difficult'],
+        message: 'Difficulty can either be easy, medium or difficult',
+      },
     },
 
     guides: [String],
@@ -77,6 +88,7 @@ const tourSchema = new mongoose.Schema(
     secretTour: {
       type: Boolean,
       default: false,
+      select: false,
     },
   },
   {
