@@ -24,8 +24,16 @@ const sendErrorProd = (err, res) => {
   }
 };
 
-const handleCastError = (err) =>
+const handleCastErrorDB = (err) =>
   new AppError(`Invalid ${err.path}: ${err.value}`, 400);
+
+const handleDuplicateFieldsDB = (err) => {
+  const values = Object.values(err.keyValue).join(', ');
+  return new AppError(
+    `Duplicate field value(s): ${values}. Please, try different value(s).`,
+    400,
+  );
+};
 
 module.exports = (err, req, res, next) => {
   err.statusCode = err.statusCode || 500;
@@ -35,7 +43,8 @@ module.exports = (err, req, res, next) => {
     sendErrorDev(err, res);
   } else if (process.env.NODE_ENV === 'production') {
     let error = { ...err };
-    if (err.name === 'CastError') error = handleCastError(error);
+    if (err.name === 'CastError') error = handleCastErrorDB(error);
+    if (err.code === 11000) error = handleDuplicateFieldsDB(error);
     sendErrorProd(error, res);
   }
 };
