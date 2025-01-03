@@ -40,6 +40,7 @@ const handleValidationErrorDB = (err) => {
     .map((el) => {
       return el.message;
     })
+    .reverse()
     .join(' & ');
 
   return new AppError(`${errorMessages}`, 400);
