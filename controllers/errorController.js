@@ -38,7 +38,6 @@ const handleDuplicateFieldsDB = (err) => {
 const handleValidationErrorDB = (err) => {
   let errorMessages = Object.values(err.errors)
     .map((el) => {
-      console.log('message inside: ', el.message);
       return el.message;
     })
     .join(' & ');
