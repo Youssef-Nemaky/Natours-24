@@ -10,6 +10,7 @@
     "author": "Burjer",
     "license": "ISC",
     "dependencies": {
+        "bcrypt": "^5.1.1",
         "dotenv": "^16.4.5",
         "eslint": "^8.57.1",
         "eslint-config-airbnb": "^19.0.4",
