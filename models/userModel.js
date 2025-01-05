@@ -1,3 +1,5 @@
+const crypto = require('crypto');
+
 const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcrypt');
@@ -45,6 +47,8 @@ const userSchema = new mongoose.Schema({
       message: 'role can either be user, admin, guide and lead-guide',
     },
   },
+  passwordResetToken: String,
+  passwordResetExpiresIn: Date,
 });
 
 userSchema.pre('save', async function (next) {
@@ -75,6 +79,19 @@ userSchema.methods.hasPasswordChanged = function (tokenIat) {
 
   return false;
 };
+
+userSchema.methods.createPasswordResetToken = function () {
+  const generatedToken = crypto.randomBytes(32).toString('hex');
+  this.passwordResetToken = crypto
+    .createHash('sha256')
+    .update(generatedToken)
+    .digest('hex');
+
+  this.passwordResetExpiresIn = Date.now() + 10 * 60 * 1000; //should be valid for 10 minutes
+
+  return generatedToken;
+};
+
 const User = mongoose.model('User', userSchema);
 
 module.exports = User;

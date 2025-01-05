@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/userModel');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
+const sendEmail = require('../utils/email');
 
 const createToken = (id) => {
   const token = jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -99,3 +100,42 @@ exports.restrictTo = (...authRoles) => {
     next();
   };
 };
+
+exports.forgotPassword = catchAsync(async (req, res, next) => {
+  //check if the email was provided
+  const { email } = req.body;
+  if (!email) return next(new AppError('Email must be provided', 400));
+
+  const foundUser = await User.findOne({ email });
+
+  //Will not return an error message if the email was not found to keep the data secret so will only comment the code
+
+  // if (!foundUser)
+  //   return next(new AppError('There is no user with the provided email', 404));
+
+  // Generate random reset token
+  const resetToken = foundUser.createPasswordResetToken();
+  foundUser.save({ validateModifiedOnly: true });
+
+  //send the email
+  const resetURL = `${req.protocol}://${req.get('host')}/api/v1/users/reset-password/${resetToken}`;
+
+  const message = `We’ve received your request to reset your password. Please click the link below to complete the reset.\n${resetURL}\nThis link is valid for a single use and expires in 10 minutes.`;
+
+  try {
+    await sendEmail({
+      email,
+      subject: 'Password Reset',
+      message,
+    });
+
+    res.status(200).json({
+      status: 'success',
+      message: 'A reset email was sent',
+    });
+  } catch (err) {
+    foundUser.passwordResetToken = undefined;
+    foundUser.passwordResetExpiresIn = undefined;
+    return next(new AppError('There was an error sending the email', 500));
+  }
+});
