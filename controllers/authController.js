@@ -57,12 +57,12 @@ exports.login = catchAsync(async (req, res, next) => {
 });
 
 exports.protect = catchAsync(async (req, res, next) => {
-  const token = req.headers.authorization.split(' ')[1];
-
   //check if the token was provided
-  if (!token) {
+  if (!req.headers.authorization) {
     return next(new AppError('No token was provided. Invalid Access', 401));
   }
+
+  const token = req.headers.authorization.split(' ')[1];
 
   //check if the token is valid and hasn't expired
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
@@ -87,3 +87,15 @@ exports.protect = catchAsync(async (req, res, next) => {
   req.user = foundUser;
   next();
 });
+
+// eslint-disable-next-line arrow-body-style
+exports.restrictTo = (...authRoles) => {
+  return function (req, res, next) {
+    if (!authRoles.includes(req.user.role)) {
+      return next(
+        new AppError('You do not have access to perform this action', 403),
+      );
+    }
+    next();
+  };
+};
