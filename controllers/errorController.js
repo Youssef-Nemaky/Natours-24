@@ -1,4 +1,5 @@
 const AppError = require('../utils/appError');
+const appError = require('../utils/appError');
 
 const sendErrorDev = (err, res) => {
   res.status(err.statusCode).json({
@@ -16,7 +17,6 @@ const sendErrorProd = (err, res) => {
       message: err.message,
     });
   } else {
-    console.error('ERROR: ', err);
     res.status(500).json({
       status: 'error',
       message: 'Something went wrong!',
@@ -46,6 +46,14 @@ const handleValidationErrorDB = (err) => {
   return new AppError(`${errorMessages}`, 400);
 };
 
+const handleJwtError = (err) => {
+  return new AppError(`${err.message}`, 401);
+};
+
+const handleJwtExpiredToken = (err) => {
+  return new AppError(`${err.message}`, 401);
+};
+
 module.exports = (err, req, res, next) => {
   err.statusCode = err.statusCode || 500;
   err.status = err.status || 'fail';
@@ -54,10 +62,13 @@ module.exports = (err, req, res, next) => {
     sendErrorDev(err, res);
   } else if (process.env.NODE_ENV === 'production') {
     let error = { ...err };
+    error.message = err.message;
 
     if (err.name === 'CastError') error = handleCastErrorDB(error);
     if (err.code === 11000) error = handleDuplicateFieldsDB(error);
     if (err.name === 'ValidationError') error = handleValidationErrorDB(error);
+    if (err.name === 'JsonWebTokenError') error = handleJwtError(error);
+    if (err.name === 'TokenExpiredError') error = handleJwtExpiredToken(error);
 
     sendErrorProd(error, res);
   }
