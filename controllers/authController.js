@@ -1,3 +1,4 @@
+const fs = require('fs');
 const { promisify } = require('util');
 
 const jwt = require('jsonwebtoken');
@@ -126,13 +127,27 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
   //send the email
   const resetURL = `${req.protocol}://${req.get('host')}/api/v1/users/reset-password/${resetToken}`;
 
-  const message = `We’ve received your request to reset your password. Please click the link below to complete the reset.\n${resetURL}\nThis link is valid for a single use and expires in 10 minutes.`;
+  const message = `We’ve received your request to reset your password. 
+  Please click the link below to complete the reset.
+  \n${resetURL}\nThis link is valid for a single use and expires in 10 minutes.`;
+
+  let resetEmailHTMLObj = await promisify(fs.readFile)(
+    `${__dirname}/../dev-data/templates/resetEmail.html`,
+    'utf-8',
+  );
+
+  const resetEmailHTML = JSON.stringify(resetEmailHTMLObj)
+    .replace('[User]', foundUser.name)
+    .replace('[Your Company]', 'Natours');
+
+  resetEmailHTMLObj = JSON.parse(resetEmailHTML);
 
   try {
     await sendEmail({
       email,
       subject: 'Password Reset',
       message,
+      html: resetEmailHTMLObj,
     });
 
     res.status(200).json({

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Reset</title>
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 1s ease-in-out;
+        }
+        .header {
+            text-align: center;
+            padding: 20px 0;
+            background-color: #28a745;
+            color: #ffffff;
+            border-radius: 10px 10px 0 0;
+            animation: fadeIn 1s ease-in-out;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .content {
+            margin: 20px 0;
+            text-align: center;
+            animation: fadeIn 1s ease-in-out;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 30px;
+            margin: 20px 0;
+            color: #ffffff;
+            background-color: #28a745;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            animation: fadeIn 1s ease-in-out;
+        }
+        .button:hover {
+            background-color: #218838;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #777;
+            font-size: 14px;
+            animation: fadeIn 1s ease-in-out;
+        }
+        .footer p {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Password Reset</h1>
+        </div>
+        <div class="content">
+            <p>Hi [User],</p>
+            <p>We received a request to reset your password. Click the button below to reset it:</p>
+            <p><a href="[Reset Link]" class="button">Reset Password</a></p>
+            <p>This link is valid for a <b>single use</b> and <b>expires in 10 minutes</b>.</p>
+            <p>If you didn't request a password reset, please ignore this email.</p>
+        </div>
+        <div class="footer">
+            <p>Thanks,<br>The [Your Company] Team</p>
+        </div>
+    </div>
+</body>
+</html>
