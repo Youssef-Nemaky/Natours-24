@@ -138,7 +138,8 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
 
   const resetEmailHTML = JSON.stringify(resetEmailHTMLObj)
     .replace('[User]', foundUser.name)
-    .replace('[Your Company]', 'Natours');
+    .replace('[Your Company]', 'Natours')
+    .replace('[Reset Link]', resetURL);
 
   resetEmailHTMLObj = JSON.parse(resetEmailHTML);
 
