@@ -31,6 +31,8 @@ const userSchema = new mongoose.Schema({
   passwordConfirm: {
     type: String,
     required: [true, 'Password confirm is required'],
+    minLength: [8, 'Password must be more than or equal to 8 characters'],
+    maxLength: [25, 'Password must be less than or equal to 25 characters'],
     validate: {
       message: 'Passwords do not match.',
       validator: function (pwd) {
