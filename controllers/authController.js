@@ -1,4 +1,5 @@
 const fs = require('fs');
+const crypto = require('crypto');
 const { promisify } = require('util');
 
 const jwt = require('jsonwebtoken');
@@ -160,4 +161,39 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
     foundUser.passwordResetExpiresIn = undefined;
     return next(new AppError('There was an error sending the email', 500));
   }
+});
+
+exports.resetPassword = catchAsync(async (req, res, next) => {
+  // Get the token
+  const passedToken = req.params.token;
+
+  // Hash the token to search for the user
+  const hashedToken = crypto
+    .createHash('sha256')
+    .update(passedToken)
+    .digest('hex');
+
+  // Get the user and also make sure that the token hasn't expired
+  const foundUser = await User.findOne({
+    passwordResetToken: hashedToken,
+    passwordResetExpiresIn: { $gt: Date.now() }, // check if the token has not expired
+  });
+
+  if (!foundUser) {
+    return next(new AppError('Token has expired or invalid', 400));
+  }
+
+  foundUser.password = req.body.password;
+  foundUser.passwordConfirm = req.body.passwordConfirm;
+  foundUser.passwordResetToken = undefined;
+  foundUser.passwordResetExpiresIn = undefined;
+
+  await foundUser.save();
+
+  const token = createToken(foundUser._id);
+
+  res.status(200).json({
+    status: 'success',
+    token,
+  });
 });

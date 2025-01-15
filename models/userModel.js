@@ -62,6 +62,14 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
+userSchema.pre('save', function (next) {
+  if (!this.isModified('password') || this.isNew) return next();
+
+  // Leave 2 seconds margin to give DB time to save
+  this.passwordChangedAt = Date.now() - 2000;
+  next();
+});
+
 userSchema.methods.isCorrectPassword = async function (candidatePassword) {
   return await bcrypt.compare(candidatePassword, this.password);
 };
