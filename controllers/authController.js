@@ -46,7 +46,7 @@ exports.login = catchAsync(async (req, res, next) => {
   if (!foundUser) return next(new AppError('Invalid email or password', 401));
 
   //Check if the password is correct
-  if (await foundUser.isCorrectPassword(password, foundUser.password)) {
+  if (await foundUser.isCorrectPassword(password)) {
     //if everyything is okay send the token to the client
     const token = createToken(foundUser._id);
 
@@ -191,6 +191,29 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
   await foundUser.save();
 
   const token = createToken(foundUser._id);
+
+  res.status(200).json({
+    status: 'success',
+    token,
+  });
+});
+
+exports.updatePassword = catchAsync(async (req, res, next) => {
+  const user = await User.findById(req.user.id).select('password');
+
+  if (!req.body.currentPassword)
+    return next(new AppError('Current password must be provided', 401));
+
+  if (!(await user.isCorrectPassword(req.body.currentPassword))) {
+    return next(new AppError('Invalid password', 401));
+  }
+
+  user.password = req.body.password;
+  user.passwordConfirm = req.body.passwordConfirm;
+
+  await user.save();
+
+  const token = createToken(user._id);
 
   res.status(200).json({
     status: 'success',
