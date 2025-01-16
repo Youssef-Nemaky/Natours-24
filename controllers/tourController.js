@@ -38,7 +38,7 @@ exports.updateTour = catchAsync(async (req, res, next) => {
   if (!tour) {
     return next(new AppError(`Tour with id: ${req.params.id} not found!`, 404));
   }
-  res.status(200).json({ status: 'sucess', data: tour });
+  res.status(200).json({ status: 'success', data: tour });
 });
 
 exports.deleteTour = catchAsync(async (req, res, next) => {
@@ -46,7 +46,7 @@ exports.deleteTour = catchAsync(async (req, res, next) => {
   if (!tour) {
     return next(new AppError(`Tour with id: ${req.params.id} not found!`, 404));
   }
-  res.status(200).json({ status: 'sucess', data: tour });
+  res.status(204).json({ status: 'success', data: null });
 });
 
 exports.aliasTopTours = (req, res, next) => {
@@ -80,7 +80,7 @@ exports.getTourStats = catchAsync(async (req, res, next) => {
     //   },
   ]);
 
-  res.status(200).json({ status: 'sucess', data: stats });
+  res.status(200).json({ status: 'success', data: stats });
 });
 
 exports.getMonthlyPlan = catchAsync(async (req, res, next) => {
@@ -118,5 +118,5 @@ exports.getMonthlyPlan = catchAsync(async (req, res, next) => {
     },
   ]);
 
-  res.status(200).json({ status: 'sucess', data: stats });
+  res.status(200).json({ status: 'success', data: stats });
 });
