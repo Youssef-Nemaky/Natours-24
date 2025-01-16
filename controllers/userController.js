@@ -36,6 +36,29 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.deleteMe = catchAsync(async (req, res, next) => {
+  //Make sure that the user has confirmed his password.
+  if (!req.body.password)
+    return next(
+      new AppError('Password must be provided to delete your account', 400),
+    );
+
+  //Get the user
+  const foundUser = await User.findById(req.user._id).select('password');
+
+  //Check the passed password
+  if (!(await foundUser.isCorrectPassword(req.body.password)))
+    return next(new AppError('Invalid Password', 401));
+
+  //Delete the user (will not set it to inactive like other people to respect the user data and GDPR)
+  await User.findByIdAndDelete(foundUser._id);
+
+  res.status(204).json({
+    status: 'success',
+    data: null,
+  });
+});
+
 exports.getAllUsers = (req, res) => {
   res
     .status(500)
