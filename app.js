@@ -1,5 +1,6 @@
 const express = require('express');
 const morgan = require('morgan');
+const { rateLimit } = require('express-rate-limit');
 
 const toursRouter = require('./routes/tourRoutes');
 const usersRouter = require('./routes/userRoutes');
@@ -7,6 +8,22 @@ const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
 
 const app = express();
+
+const appLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  limit: 300, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
+  message: 'Too many requests from this IP. Please, try again in 15 minutes',
+});
+
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  limit: 20, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
+  message: 'Too many requests from this IP. Please, try again in 15 minutes',
+});
+
+app.use('/api', appLimiter);
+app.use('/api/v1/users/login', loginLimiter);
+
 app.use(express.json());
 app.use(morgan('dev'));
 
