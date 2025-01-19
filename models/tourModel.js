@@ -65,7 +65,12 @@ const tourSchema = new mongoose.Schema(
       },
     },
 
-    guides: [String],
+    guides: [
+      {
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: 'User',
+      },
+    ],
 
     summary: {
       type: String,
@@ -134,6 +139,15 @@ tourSchema.virtual('durationWeeks').get(function () {
 
 tourSchema.pre('save', function (next) {
   this.slug = slugify(this.name, { lower: true });
+  next();
+});
+
+tourSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: 'guides',
+    select:
+      '-__v -passwordChangedAt -passwordResetExpiresIn -passwordResetToken',
+  });
   next();
 });
 
