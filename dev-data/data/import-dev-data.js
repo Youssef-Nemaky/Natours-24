@@ -18,7 +18,7 @@ const connectDB = async () => {
 
 const importData = async () => {
   try {
-    const tours = JSON.parse(fs.readFileSync('./tours-simple.json', 'utf-8'));
+    const tours = JSON.parse(fs.readFileSync('./tours.json', 'utf-8'));
     tours.forEach((tour) => {
       delete tour.id;
     });
