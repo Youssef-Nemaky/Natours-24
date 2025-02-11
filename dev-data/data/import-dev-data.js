@@ -4,6 +4,8 @@ const mongoose = require('mongoose');
 require('dotenv').config({ path: '../../.env' });
 
 const Tour = require('../../models/tourModel');
+const User = require('../../models/userModel');
+const Review = require('../../models/reviewModel');
 
 const connectDB = async () => {
   try {
@@ -16,38 +18,66 @@ const connectDB = async () => {
   }
 };
 
-const importData = async () => {
+const importData = async (field) => {
   try {
-    const tours = JSON.parse(fs.readFileSync('./tours.json', 'utf-8'));
-    tours.forEach((tour) => {
-      delete tour.id;
-    });
+    const data = JSON.parse(fs.readFileSync(`./${field}.json`, 'utf-8'));
+
     await connectDB();
-    await Tour.create(tours);
+    switch (field) {
+      case 'tours':
+        await Tour.create(data);
+        break;
+      case 'users':
+        await User.create(data);
+        break;
+      case 'reviews':
+        await Review.create(data);
+        break;
+      default:
+    }
+
     process.exit();
   } catch (error) {
     console.log(error);
   }
 };
 
-const deleteData = async () => {
+const deleteData = async (field) => {
   try {
     await connectDB();
-    await Tour.deleteMany();
+    switch (field) {
+      case 'tours':
+        await Tour.deleteMany();
+        break;
+      case 'users':
+        await User.deleteMany();
+        break;
+      case 'reviews':
+        await Review.deleteMany();
+        break;
+      default:
+    }
     process.exit();
   } catch (error) {
     console.log(error);
   }
 };
 
-if (process.argv[2] === '--import') {
-  importData();
+if (process.argv[2] !== '--help' && (!process.argv[2] || !process.argv[3])) {
+  console.log(
+    'invalid argument: run: node import-dev-data.js --help for more info.',
+  );
+  process.exit();
+}
+
+if (process.argv[2] === '--help') {
+  console.log(
+    '--import (tours/users/reviews) or --delete (tours/users/reviews)',
+  );
+} else if (process.argv[2] === '--import') {
+  importData(process.argv[3]);
   console.log('Imported all the data to the DB');
 } else if (process.argv[2] === '--delete') {
   deleteData();
   console.log('Deleted all the data in the DB');
-} else {
-  console.log(
-    'invalid argument: run node import-dev-data.js [--import / --delete] ',
-  );
 }
