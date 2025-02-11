@@ -143,11 +143,13 @@ tourSchema.pre('save', function (next) {
 });
 
 tourSchema.pre(/^find/, function (next) {
-  this.populate({
-    path: 'guides',
-    select:
-      '-__v -passwordChangedAt -passwordResetExpiresIn -passwordResetToken',
-  });
+  if (!this._fields || this._fields.hasOwnProperty('guides')) {
+    this.populate({
+      path: 'guides',
+      select:
+        '-__v -passwordChangedAt -passwordResetExpiresIn -passwordResetToken',
+    });
+  }
   next();
 });
 
