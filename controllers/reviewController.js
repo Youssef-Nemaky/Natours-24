@@ -1,6 +1,8 @@
 const Review = require('../models/reviewModel');
 const catchAsync = require('../utils/catchAsync');
 
+const { updateOne } = require('./handlerFactory');
+
 exports.getAllReviews = catchAsync(async (req, res, next) => {
   // support getting reviews on a specific tour
   const filter = req.params.tourId ? { tour: req.params.tourId } : {};
@@ -23,3 +25,5 @@ exports.createReview = catchAsync(async (req, res, next) => {
     review: newReview,
   });
 });
+
+exports.updateReview = updateOne(Review);
