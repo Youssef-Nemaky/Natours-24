@@ -3,7 +3,7 @@ const APIFeatures = require('../utils/apiFeatures');
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
 
-const { updateOne } = require('./handlerFactory');
+const { updateOne, deleteOne } = require('./handlerFactory');
 
 exports.getAllTours = catchAsync(async (req, res, next) => {
   // const tours = fs.createReadStream('./dev-data/data/tours-simple.json', 'utf8');
@@ -33,14 +33,7 @@ exports.getTour = catchAsync(async (req, res, next) => {
 });
 
 exports.updateTour = updateOne(Tour);
-
-exports.deleteTour = catchAsync(async (req, res, next) => {
-  const tour = await Tour.findByIdAndDelete(req.params.id);
-  if (!tour) {
-    return next(new AppError(`Tour with id: ${req.params.id} not found!`, 404));
-  }
-  res.status(204).json({ status: 'success', data: null });
-});
+exports.deleteTour = deleteOne(Tour);
 
 exports.aliasTopTours = (req, res, next) => {
   // limit=5&sort=-ratingsAverage,price
