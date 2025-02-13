@@ -2,6 +2,8 @@ const User = require('../models/userModel');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 
+const { updateOne } = require('./handlerFactory');
+
 exports.updateMe = catchAsync(async (req, res, next) => {
   // Check if the password was sent in the request
   if (req.body.password || req.body.passwordConfirm) {
@@ -77,11 +79,7 @@ exports.createUser = (req, res) => {
     .json({ status: 'failed', message: 'Route is not yet implemented' });
 };
 
-exports.updateUser = (req, res) => {
-  res
-    .status(500)
-    .json({ status: 'failed', message: 'Route is not yet implemented' });
-};
+exports.updateUser = updateOne(User);
 
 exports.deleteUser = (req, res) => {
   res

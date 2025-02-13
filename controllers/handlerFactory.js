@@ -3,6 +3,12 @@ const catchAsync = require('../utils/catchAsync');
 
 exports.updateOne = (Model) =>
   catchAsync(async (req, res, next) => {
+    // shouldn't change passwords in here
+    if (req.body.password || req.body.passwordConfirm) {
+      return next(
+        new AppError('Bad Request: use update-password instead', 400),
+      );
+    }
     const doc = await Model.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
       runValidators: true,
