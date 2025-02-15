@@ -5,6 +5,7 @@ const {
   setTourUserIds,
   createReview,
   updateReview,
+  getReview,
 } = require('../controllers/reviewController');
 
 const { protect, restrictTo } = require('../controllers/authController');
@@ -16,5 +17,5 @@ router
   .get(getAllReviews)
   .post(protect, restrictTo('user'), setTourUserIds, createReview);
 
-router.route('/:id').patch(updateReview);
+router.route('/:id').get(getReview).patch(updateReview);
 module.exports = router;

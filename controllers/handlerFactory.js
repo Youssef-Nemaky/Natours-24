@@ -7,6 +7,17 @@ exports.createOne = (Model) =>
     res.status(201).json({ status: 'success', data: newDoc });
   });
 
+exports.getOne = (Model, popOptions) =>
+  catchAsync(async (req, res, next) => {
+    const doc = await Model.findById(req.params.id).populate(popOptions);
+    if (!doc) {
+      return next(
+        new AppError(`Tour with id: ${req.params.id} not found!`, 404),
+      );
+    }
+    res.status(200).json({ status: 'success', data: doc });
+  });
+
 exports.updateOne = (Model) =>
   catchAsync(async (req, res, next) => {
     // shouldn't change passwords in here
