@@ -1,5 +1,6 @@
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
+const APIFeatures = require('../utils/apiFeatures');
 
 exports.createOne = (Model) =>
   catchAsync(async (req, res, next) => {
@@ -7,12 +8,28 @@ exports.createOne = (Model) =>
     res.status(201).json({ status: 'success', data: newDoc });
   });
 
+exports.getAll = (Model) =>
+  catchAsync(async (req, res, next) => {
+    // support getting reviews on a specific tour
+    const filter = req.params.tourId ? { tour: req.params.tourId } : {};
+
+    const features = new APIFeatures(Model.find(filter), req.query)
+      .filter()
+      .sort()
+      .limitFields()
+      .paginate();
+    const docs = await features.query;
+    res
+      .status(200)
+      .json({ status: 'success', length: docs.length, data: docs });
+  });
+
 exports.getOne = (Model, popOptions) =>
   catchAsync(async (req, res, next) => {
     const doc = await Model.findById(req.params.id).populate(popOptions);
     if (!doc) {
       return next(
-        new AppError(`Tour with id: ${req.params.id} not found!`, 404),
+        new AppError(`Document with id: ${req.params.id} not found!`, 404),
       );
     }
     res.status(200).json({ status: 'success', data: doc });

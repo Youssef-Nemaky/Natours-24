@@ -3,21 +3,15 @@ const APIFeatures = require('../utils/apiFeatures');
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
 
-const { createOne, getOne, updateOne, deleteOne } = require('./handlerFactory');
+const {
+  createOne,
+  getAll,
+  getOne,
+  updateOne,
+  deleteOne,
+} = require('./handlerFactory');
 
-exports.getAllTours = catchAsync(async (req, res, next) => {
-  // const tours = fs.createReadStream('./dev-data/data/tours-simple.json', 'utf8');
-  // data.pipe(tours);
-
-  const features = new APIFeatures(Tour.find(), req.query)
-    .filter()
-    .sort()
-    .limitFields()
-    .paginate();
-  const tours = await features.query;
-  res.status(200).json({ status: 'success', length: tours.length, tours });
-});
-
+exports.getAllTours = getAll(Tour);
 exports.createTour = createOne(Tour);
 exports.getTour = getOne(Tour, { path: 'reviews' });
 exports.updateTour = updateOne(Tour);

@@ -2,7 +2,7 @@ const User = require('../models/userModel');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 
-const { getOne, updateOne, deleteOne } = require('./handlerFactory');
+const { getAll, getOne, updateOne, deleteOne } = require('./handlerFactory');
 
 exports.updateMe = catchAsync(async (req, res, next) => {
   // Check if the password was sent in the request
@@ -61,12 +61,6 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.getAllUsers = (req, res) => {
-  res
-    .status(500)
-    .json({ status: 'failed', message: 'Route is not yet implemented' });
-};
-
 exports.createUser = (req, res) => {
   res.status(500).json({
     status: 'error',
@@ -74,6 +68,7 @@ exports.createUser = (req, res) => {
   });
 };
 
+exports.getAllUsers = getAll(User);
 exports.getUser = getOne(User);
 exports.updateUser = updateOne(User);
 exports.deleteUser = deleteOne(User);
