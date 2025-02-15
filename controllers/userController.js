@@ -74,9 +74,10 @@ exports.getUser = (req, res) => {
 };
 
 exports.createUser = (req, res) => {
-  res
-    .status(500)
-    .json({ status: 'failed', message: 'Route is not yet implemented' });
+  res.status(500).json({
+    status: 'error',
+    message: 'This route is not defined! use /signup instead',
+  });
 };
 
 exports.updateUser = updateOne(User);

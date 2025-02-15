@@ -1,7 +1,7 @@
 const Review = require('../models/reviewModel');
 const catchAsync = require('../utils/catchAsync');
 
-const { updateOne, deleteOne } = require('./handlerFactory');
+const { createOne, updateOne, deleteOne } = require('./handlerFactory');
 
 exports.getAllReviews = catchAsync(async (req, res, next) => {
   // support getting reviews on a specific tour
@@ -15,16 +15,12 @@ exports.getAllReviews = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.createReview = catchAsync(async (req, res, next) => {
+exports.setTourUserIds = (req, res, next) => {
   req.body.tour = req.body.tour || req.params.tourId;
-  req.body.user = req.body.user || req.user._id;
+  req.body.user = req.user._id;
+  next();
+};
 
-  const newReview = await Review.create(req.body);
-  res.status(201).json({
-    status: 'sucesss',
-    review: newReview,
-  });
-});
-
+exports.createReview = createOne(Review);
 exports.updateReview = updateOne(Review);
 exports.deleteOne = deleteOne(Review);

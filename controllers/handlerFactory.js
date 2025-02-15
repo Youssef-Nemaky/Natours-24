@@ -1,6 +1,12 @@
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
 
+exports.createOne = (Model) =>
+  catchAsync(async (req, res, next) => {
+    const newDoc = await Model.create(req.body);
+    res.status(201).json({ status: 'success', data: newDoc });
+  });
+
 exports.updateOne = (Model) =>
   catchAsync(async (req, res, next) => {
     // shouldn't change passwords in here

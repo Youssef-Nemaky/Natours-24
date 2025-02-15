@@ -3,7 +3,7 @@ const APIFeatures = require('../utils/apiFeatures');
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
 
-const { updateOne, deleteOne } = require('./handlerFactory');
+const { createOne, updateOne, deleteOne } = require('./handlerFactory');
 
 exports.getAllTours = catchAsync(async (req, res, next) => {
   // const tours = fs.createReadStream('./dev-data/data/tours-simple.json', 'utf8');
@@ -18,11 +18,7 @@ exports.getAllTours = catchAsync(async (req, res, next) => {
   res.status(200).json({ status: 'success', length: tours.length, tours });
 });
 
-exports.createTour = catchAsync(async (req, res, next) => {
-  // eslint-disable-next-line node/no-unsupported-features/es-syntax
-  const newTour = await Tour.create(req.body);
-  res.status(201).json({ status: 'success', data: newTour });
-});
+exports.createTour = createOne(Tour);
 
 exports.getTour = catchAsync(async (req, res, next) => {
   const tour = await Tour.findById(req.params.id).populate('reviews');
