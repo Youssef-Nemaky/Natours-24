@@ -4,6 +4,12 @@ const AppError = require('../utils/appError');
 
 const { getAll, getOne, updateOne, deleteOne } = require('./handlerFactory');
 
+exports.getMe = (req, res, next) => {
+  console.log(req.user._id, req.params.id);
+  req.params.id = req.user._id;
+  next();
+};
+
 exports.updateMe = catchAsync(async (req, res, next) => {
   // Check if the password was sent in the request
   if (req.body.password || req.body.passwordConfirm) {
