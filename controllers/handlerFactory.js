@@ -65,3 +65,33 @@ exports.deleteOne = (Model) =>
     }
     res.status(204).json({ status: 'success', data: null });
   });
+
+exports.deleteOneIfOwner = (Model, idField) =>
+  catchAsync(async (req, res, next) => {
+    console.log(req.params.id);
+
+    const doc = await Model.findById(req.params.id);
+
+    if (!doc) {
+      return next(new AppError(`Invalid ${Model.modelName} ID`, 404));
+    }
+
+    let deletedDoc = null;
+
+    if (req.user.role !== 'admin') {
+      deletedDoc = await Model.findOneAndDelete({
+        _id: req.params.id,
+        [idField]: req.user._id,
+      });
+    } else {
+      deletedDoc = await Model.findByIdAndDelete(req.params.id);
+    }
+
+    if (!deletedDoc) {
+      return next(
+        new AppError('You do not have access to perform this action', 403),
+      );
+    }
+
+    res.status(204).json({ status: 'success', data: null });
+  });

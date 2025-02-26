@@ -6,6 +6,7 @@ const {
   getOne,
   updateOne,
   deleteOne,
+  deleteOneIfOwner,
 } = require('./handlerFactory');
 
 exports.setTourUserIds = (req, res, next) => {
@@ -18,4 +19,4 @@ exports.createReview = createOne(Review);
 exports.getAllReviews = getAll(Review);
 exports.getReview = getOne(Review);
 exports.updateReview = updateOne(Review);
-exports.deleteOne = deleteOne(Review);
+exports.deleteReview = deleteOneIfOwner(Review, 'user');
