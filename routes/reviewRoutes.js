@@ -17,5 +17,8 @@ router
   .get(getAllReviews)
   .post(protect, restrictTo('user'), setTourUserIds, createReview);
 
-router.route('/:id').get(getReview).patch(updateReview);
+router
+  .route('/:id')
+  .get(getReview)
+  .patch(protect, restrictTo('user', 'admin'), updateReview);
 module.exports = router;
