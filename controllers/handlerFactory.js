@@ -55,6 +55,48 @@ exports.updateOne = (Model) =>
     res.status(200).json({ status: 'success', data: doc });
   });
 
+exports.updateOneIfOwner = (Model, idField) =>
+  catchAsync(async (req, res, next) => {
+    // shouldn't change passwords in here
+    if (req.body.password || req.body.passwordConfirm) {
+      return next(
+        new AppError('Bad Request: use update-password instead', 400),
+      );
+    }
+
+    let doc = Model.findById(req.params.id);
+
+    if (!doc) {
+      return next(
+        new AppError(`document with id: ${req.params.id} not found!`, 404),
+      );
+    }
+
+    if (req.user.role === 'admin') {
+      doc = await Model.findByIdAndUpdate(req.params.id, req.body, {
+        new: true,
+        runValidators: true,
+      });
+    } else {
+      // user case
+      doc = await Model.findOneAndUpdate(
+        {
+          _id: req.params.id,
+          [idField]: req.user._id,
+        },
+        req.body,
+      );
+
+      if (!doc) {
+        return next(
+          new AppError('You do not have access to perform this action', 403),
+        );
+      }
+    }
+
+    res.status(200).json({ status: 'success', data: doc });
+  });
+
 exports.deleteOne = (Model) =>
   catchAsync(async (req, res, next) => {
     const doc = await Model.findByIdAndDelete(req.params.id);
