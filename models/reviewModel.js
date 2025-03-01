@@ -67,16 +67,14 @@ reviewSchema.statics.calcAverageRating = async function (tourId) {
       },
     },
   ]);
-
   await Tour.findByIdAndUpdate(tourId, {
     ratingsAverage: stats[0].avgRating,
     ratingsQuantity: stats[0].nRatings,
   });
 };
 
-reviewSchema.pre('save', function (next) {
+reviewSchema.post('save', function () {
   this.constructor.calcAverageRating(this.tour._id);
-  next();
 });
 
 reviewSchema.post(/^findOneAnd/, function (result) {
