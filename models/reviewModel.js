@@ -81,6 +81,8 @@ reviewSchema.post(/^findOneAnd/, function (result) {
   this.model.calcAverageRating(result.tour._id);
 });
 
+reviewSchema.index({ user: 1, tour: 1 }, { unique: true });
+
 const Review = mongoose.model('Review', reviewSchema);
 
 module.exports = Review;
