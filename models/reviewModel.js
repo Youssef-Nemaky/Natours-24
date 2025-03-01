@@ -78,7 +78,9 @@ reviewSchema.post('save', function () {
 });
 
 reviewSchema.post(/^findOneAnd/, function (result) {
-  this.model.calcAverageRating(result.tour._id);
+  if (result) {
+    this.model.calcAverageRating(result.tour._id);
+  }
 });
 
 reviewSchema.index({ user: 1, tour: 1 }, { unique: true });
