@@ -29,12 +29,6 @@ const tourSchema = new mongoose.Schema(
         message: 'Price discount must be lower than original price',
       },
     },
-    rating: {
-      type: Number,
-      default: 4.5,
-      min: [1, 'Tour rating must be above or equal to 1.0'],
-      max: [5, 'Tour rating must be below or equal to 5.0'],
-    },
 
     duration: {
       type: Number,
