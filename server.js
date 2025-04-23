@@ -4,9 +4,9 @@ const mongoose = require('mongoose');
 const app = require('./app');
 
 mongoose
-  .connect(process.env.MONGO_URi)
+  .connect(process.env.MONGO_URI)
   .then(console.log('Connected to DB...'))
-  .catch((err) => console.log('Failed to connect to db', err));
+  .catch((err) => console.error('Failed to connect to db', err));
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
